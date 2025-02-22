@@ -24,6 +24,7 @@ export function getLinkedLibs(fileBytes) {
     for (let { data } of reExportedThings) {
         const nameData = data.slice(offsetToName,)
         const pathString = (new TextDecoder().decode(nameData)).replace(/\x00+$/g,"") // chop off null terminator(s)
+        outputPaths.push(pathString)
     }
     return outputPaths
 }
