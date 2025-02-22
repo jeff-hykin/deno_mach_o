@@ -1,6 +1,6 @@
 running 0 tests from ./main/get_symbol_info.js
-running 1 test from ./main/get_symbol_info.js$7-12.js
-file:///Users/jeffhykin/repos/deno_mach_o/main/get_symbol_info.js$7-12.js ...
+running 1 test from ./main/get_symbol_info.js$8-13.js
+file:///Users/jeffhykin/repos/deno_mach_o/main/get_symbol_info.js$8-13.js ...
 ------- post-test output -------
 {
   _libSystem_atfork_prepare: { internal: true },
@@ -89,7 +89,7 @@ file:///Users/jeffhykin/repos/deno_mach_o/main/get_symbol_info.js$7-12.js ...
   _xpc_atfork_prepare: { internal: false }
 }
 ----- post-test output end -----
-file:///Users/jeffhykin/repos/deno_mach_o/main/get_symbol_info.js$7-12.js ... ok (3ms)
+file:///Users/jeffhykin/repos/deno_mach_o/main/get_symbol_info.js$8-13.js ... ok (3ms)
 
 ok | 1 passed | 0 failed (19ms)
 

@@ -11,7 +11,7 @@ import { parse as parseMachO } from "./mach_o.js"
  * ```
  *
  * @param fileBytes - (Uint8Array or similar of .dylib file)
- * @returns {Object} output - keys=symbols, values=flags about the symbol
+ * @returns {[string]} output - list of linked libraries
  */
 export function getLinkedLibs(fileBytes) {
     const info = parseMachO(fileBytes)

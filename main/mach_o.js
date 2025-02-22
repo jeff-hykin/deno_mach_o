@@ -2,6 +2,35 @@ import { Buffer } from "./buffer_shim.js"
 import * as constants from "./constants.js"
 import { Reader } from "./endian_reader.js"
 
+/**
+ * get symbol names and info for a .dylib file
+ *
+ * @example
+ * ```js
+ * const path = (new URL(import.meta.resolve("../test_data/libSystem.B.dylib"))).pathname
+ * const file = Deno.readFileSync(path)
+ * console.log(parse(file))
+ * ```
+ *
+ * @param fileBytes - (Uint8Array or similar of .dylib file)
+ * @returns {Object} The binary information.
+ * @returns {number} returns.bits - The number of bits (e.g., 64).
+ * @returns {number} returns.magic - A magic number (e.g., 4277009103).
+ * @returns {number} returns.hsize - The header size (e.g., 32).
+ * @returns {Object} returns.cpu - Information about the CPU.
+ * @returns {string} returns.cpu.type - The CPU type (e.g., "arm64").
+ * @returns {string} returns.cpu.subtype - The CPU subtype (e.g., "e").
+ * @returns {string} returns.cpu.endian - The CPU endian format (e.g., "le").
+ * @returns {string} returns.filetype - The file type (e.g., "dylib").
+ * @returns {number} returns.ncmds - The number of commands (e.g., 52).
+ * @returns {number} returns.sizeofcmds - The size of commands (e.g., 3976).
+ * @returns {Object} returns.flags - Flags related to the binary.
+ * @returns {boolean} returns.flags.noundefs - Indicates whether there are no undefined symbols.
+ * @returns {boolean} returns.flags.dyldlink - Indicates if dynamic linking is used.
+ * @returns {boolean} returns.flags.twolevel - Indicates if a two-level namespace is used.
+ * @returns {boolean} returns.flags.app_extension_safe - Indicates if the app is extension-safe.
+ * @returns {Array} returns.cmds - The commands associated with the binary (empty in this case).
+ */
 export function parse(buf) {
     if (!(buf instanceof Buffer)) {
         buf = new Buffer(buf)

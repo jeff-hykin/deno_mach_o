@@ -9,7 +9,7 @@ const Path = await import('https://deno.land/std@0.128.0/path/mod.ts')
 const argsInfo = parseArgs({
     rawArgs: Deno.args,
     fields: [
-        [[0, "--file"], required, str=>str],
+        [[0, "--file"], str=>str],
         [["--direct-symbols-only"], initialValue(false), (str)=>Boolean(str)],
         [["--include-internal-symbols"], initialValue(false), (str)=>Boolean(str)],
         [["--extra-roots"], initialValue([]), str=>JSON.parse(str)],
@@ -24,7 +24,7 @@ const argsInfo = parseArgs({
     implicitNamePattern: /^(--|-)[a-zA-Z0-9\-_]+$/,
     implictFlagPattern: null,
 })
-if (argsInfo.help) {
+if (argsInfo.simplifiedNames.help) {
     console.log(`
         --version                  - prints version
         --file <path>              - path to .dylib or executable file
@@ -39,8 +39,8 @@ if (argsInfo.help) {
     `)
     Deno.exit(0)
 }
-if (argsInfo.version) {
-    console.log("0.0.1")
+if (argsInfo.simplifiedNames.version) {
+    console.log("0.0.1.0")
     Deno.exit(0)
 }
 didYouMean({

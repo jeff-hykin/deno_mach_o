@@ -2,9 +2,46 @@ running 0 tests from ./main/get_linked_libs.js
 running 1 test from ./main/get_linked_libs.js$7-12.js
 file:///Users/jeffhykin/repos/deno_mach_o/main/get_linked_libs.js$7-12.js ...
 ------- post-test output -------
-[]
+[
+  "/lib/system/libcache.dylib",
+  "/lib/system/libcommonCrypto.dylib",
+  "/lib/system/libcompiler_rt.dylib",
+  "/lib/system/libcopyfile.dylib",
+  "/lib/system/libcorecrypto.dylib",
+  "/lib/system/libdispatch.dylib",
+  "/lib/system/libdyld.dylib",
+  "/lib/system/libkeymgr.dylib",
+  "/lib/system/libmacho.dylib",
+  "/lib/system/libquarantine.dylib",
+  "/lib/system/libremovefile.dylib",
+  "/lib/system/libsystem_asl.dylib",
+  "/lib/system/libsystem_blocks.dylib",
+  "/lib/system/libsystem_c.dylib",
+  "/lib/system/libsystem_collections.dylib",
+  "/lib/system/libsystem_configuration.dylib",
+  "/lib/system/libsystem_containermanager.dylib",
+  "/lib/system/libsystem_coreservices.dylib",
+  "/lib/system/libsystem_darwin.dylib",
+  "/lib/system/libsystem_dnssd.dylib",
+  "/lib/system/libsystem_featureflags.dylib",
+  "/lib/system/libsystem_info.dylib",
+  "/lib/system/libsystem_m.dylib",
+  "/lib/system/libsystem_malloc.dylib",
+  "/lib/system/libsystem_networkextension.dylib",
+  "/lib/system/libsystem_notify.dylib",
+  "/lib/system/libsystem_product_info_filter.dylib",
+  "/lib/system/libsystem_sandbox.dylib",
+  "/lib/system/libsystem_secinit.dylib",
+  "/lib/system/libsystem_kernel.dylib",
+  "/lib/system/libsystem_platform.dylib",
+  "/lib/system/libsystem_pthread.dylib",
+  "/lib/system/libsystem_symptoms.dylib",
+  "/lib/system/libsystem_trace.dylib",
+  "/lib/system/libunwind.dylib",
+  "/lib/system/libxpc.dylib"
+]
 ----- post-test output end -----
-file:///Users/jeffhykin/repos/deno_mach_o/main/get_linked_libs.js$7-12.js ... ok (3ms)
+file:///Users/jeffhykin/repos/deno_mach_o/main/get_linked_libs.js$7-12.js ... ok (4ms)
 
-ok | 1 passed | 0 failed (19ms)
+ok | 1 passed | 0 failed (20ms)
 
