@@ -16,10 +16,6 @@ import { parse as parseMachO } from "./mach_o.js"
 export function getRexportedLibs(fileBytes) {
     const info = parseMachO(fileBytes)
     const reExportedThings = info.cmds.filter(each=>each.type == "reexport_dylib")
-    // console.debug(`info.cmds.map(each=>each.type) is:`,new Set(info.cmds.map(each=>each.type)))
-    // const otherCmds = info.cmds.filter(each=>each.type != "reexport_dylib")
-    // new TextDecoder().decode(new Uint8Array(info.cmds.filter(each=>each.type == "uuid")[0].data))
-    // reExportedThings.map(each=>new Uint8Array(each.data))
     const offsetToName = 20 // NOTE: this is from observation, not from documentation. I think this is always the same for "reexport_dylib" segments
     let outputPaths = []
     for (let { data } of reExportedThings) {

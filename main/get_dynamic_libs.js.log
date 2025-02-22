@@ -1,0 +1,10 @@
+running 0 tests from ./main/get_dynamic_libs.js
+running 1 test from ./main/get_dynamic_libs.js$7-12.js
+file:///Users/jeffhykin/repos/deno_mach_o/main/get_dynamic_libs.js$7-12.js ...
+------- post-test output -------
+[]
+----- post-test output end -----
+file:///Users/jeffhykin/repos/deno_mach_o/main/get_dynamic_libs.js$7-12.js ... ok (2ms)
+
+ok | 1 passed | 0 failed (17ms)
+

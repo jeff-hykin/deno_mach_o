@@ -10,9 +10,9 @@ const argsInfo = parseArgs({
     rawArgs: Deno.args,
     fields: [
         [[0, "--file"], str=>str],
-        [["--direct-symbols-only"], flag, (str)=>Boolean(str)],
-        [["--include-internal-symbols"], flag, (str)=>Boolean(str)],
-        [["--extra-roots"], initialValue([]), str=>JSON.parse(str)],
+        [["--direct-symbols-only"], flag, ],
+        [["--include-internal-symbols"], flag, ],
+        [["--extra-root"], initialValue([]), (value)=>value instanceof Array ? value : [value]],
         [["--help"], flag, ],
         [["--version"], flag, ],
     ],
@@ -28,14 +28,21 @@ if (argsInfo.simplifiedNames.help) {
     console.log(`
         --version                  - prints version
         --file <path>              - path to .dylib or executable file
-        --extra-roots '[]'         - JSON list of extra root paths to search for
-                                     linked libraries
-                                     ex: 'unable to read /lib/system/libxpc.dylib' will
-                                     try /your_root/lib/system/libxpc.dylib before giving up
+        --extra-root 'root1'      - path for extra root to search in 
+        --extra-root 'root2'        ex: 'unable to read /lib/system/libxpc.dylib' will
+                                    try /your_root/lib/system/libxpc.dylib before giving up
         --direct-symbols-only      - basically = recursive=false
         --include-internal-symbols - note: usually you'll only care about external symbols
     
     NOTE: all output is valid YAML, for easy parsing
+
+    Examples:
+        macho_list_symbols --help
+        macho_list_symbols --version
+        macho_list_symbols --file /path/to/file.dylib
+        macho_list_symbols --file /path/to/file.dylib --direct-symbols-only
+        macho_list_symbols --file /path/to/file.dylib --include-internal-symbols
+        macho_list_symbols --file /path/to/file.dylib --extra-root '/path/to/root1' --extra-root "/path/to/root2"
     `)
     Deno.exit(0)
 }
@@ -61,21 +68,27 @@ if (args.directSymbolsOnly) {
     }
 } else {
     const start = Path.dirname(args.file)
-    function recursivegetRexportedLibs(filePath, alreadySeen=new Set()) {
+    function recursiveGetRexportedLibs(filePath, alreadySeen=new Set()) {
         let file
         let errorString = ""
         try {
             try {
                 file = Deno.readFileSync(filePath)
             } catch (error) {
-                // FIXME: probably need to use LD_LIBRARY_PATH or DYLD_LIBRARY_PATH
-                for (let each of args.extraRoots) {
+                // TODO: probably could use LD_LIBRARY_PATH or DYLD_LIBRARY_PATH
+                for (let each of args.extraRoot) {
                     const path = `${each}/${filePath}`
                     try {
                         file = Deno.readFileSync(path)
                         break
                     } catch (error) {
-                        errorString = `${errorString}\n    # NOTE: unable to read ${filePath}, skipping. Error: ${`${error?.stack||error}`.replace(/\n/g, "\n     #    ")}`
+                        let extraInfo = `${error?.stack||error}`.replace(/\n/g, "\n    # ")
+                        if (extraInfo.startsWith("NotFound: No such file or directory ")){
+                            extraInfo = ""
+                        } else {
+                            extraInfo = `error message: ${extraInfo}`
+                        }
+                        errorString = `${errorString}\n    # NOTE: unable to read ${JSON.stringify(path)}, skipping. ${extraInfo}`
                     }
                 }
                 if (!file) {
@@ -83,7 +96,13 @@ if (args.directSymbolsOnly) {
                 }
             }
         } catch (error) {
-            console.error(`# NOTE: unable to read ${filePath}, skipping. Error: ${`${error?.stack||error}`.replace(/\n/g, "\n #    ")}\n${errorString}`)
+            let extraInfo = `${error?.stack||error}`.replace(/\n/g, "\n    # ")
+            if (extraInfo.startsWith("NotFound: No such file or directory ")){
+                extraInfo = ""
+            } else {
+                extraInfo = `error message: ${extraInfo}`
+            }
+            console.error(`# ERROR: unable to read ${filePath}, skipping. ${extraInfo}${errorString}`)
             return
         }
         const symbols = getSymbolInfo(file)
@@ -96,9 +115,9 @@ if (args.directSymbolsOnly) {
         for (const lib of libs) {
             if (!alreadySeen.has(lib)) {
                 alreadySeen.add(lib)
-                recursivegetRexportedLibs(lib, alreadySeen)
+                recursiveGetRexportedLibs(lib, alreadySeen)
             }
         }
     }
-    recursivegetRexportedLibs(args.file)
+    recursiveGetRexportedLibs(args.file)
 }

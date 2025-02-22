@@ -1,6 +1,6 @@
-running 0 tests from ./main/get_linked_libs.js
-running 1 test from ./main/get_linked_libs.js$7-12.js
-file:///Users/jeffhykin/repos/deno_mach_o/main/get_linked_libs.js$7-12.js ...
+running 0 tests from ./main/get_reexported_libs.js
+running 1 test from ./main/get_reexported_libs.js$7-12.js
+file:///Users/jeffhykin/repos/deno_mach_o/main/get_reexported_libs.js$7-12.js ...
 ------- post-test output -------
 [
   "/lib/system/libcache.dylib",
@@ -41,7 +41,7 @@ file:///Users/jeffhykin/repos/deno_mach_o/main/get_linked_libs.js$7-12.js ...
   "/lib/system/libxpc.dylib"
 ]
 ----- post-test output end -----
-file:///Users/jeffhykin/repos/deno_mach_o/main/get_linked_libs.js$7-12.js ... ok (3ms)
+file:///Users/jeffhykin/repos/deno_mach_o/main/get_reexported_libs.js$7-12.js ... ok (3ms)
 
-ok | 1 passed | 0 failed (20ms)
+ok | 1 passed | 0 failed (19ms)
 
