@@ -1,6 +1,6 @@
 # What is this?
 
-This is modern easy-to-use tooling for getting data out of MacOS executables and dynamic libraries. This is a updated forked version of macho (npm).
+This is modern easy-to-use tooling for getting data out of MacOS executables and dynamic libraries (even on the web!). This is a updated forked version of macho (npm).
 
 # How do I use it?
 
@@ -9,7 +9,7 @@ There is both a handy CLI and a library, which do different things.
 ## JavaScript API (works in Browsers and Deno)
 
 ```js
-import { parseMachO, getDynamicLibs, getRexportedLibs, getSymbolInfo } from "https://esm.sh/mach_o_js@0.0.1.0/main.js"
+import { parseMachO, getDynamicLibs, getRexportedLibs, getSymbolInfo } from "https://esm.sh/gh/jeff-hykin/mach_o_js@0.0.1.0/main.js"
 
 // get a Uint8Array of the file
 let uint8Array = await Deno.readFile("./path/to/executable")
