@@ -7,15 +7,16 @@ import { parse as parseMachO } from "./mach_o.js"
  * ```js
  * const path = (new URL(import.meta.resolve("../test_data/libSystem.B.dylib"))).pathname
  * const file = Deno.readFileSync(path)
- * console.log(getLinkedLibs(file))
+ * console.log(getRexportedLibs(file))
  * ```
  *
  * @param fileBytes - (Uint8Array or similar of .dylib file)
  * @returns {[string]} output - list of linked libraries
  */
-export function getLinkedLibs(fileBytes) {
+export function getRexportedLibs(fileBytes) {
     const info = parseMachO(fileBytes)
     const reExportedThings = info.cmds.filter(each=>each.type == "reexport_dylib")
+    // console.debug(`info.cmds.map(each=>each.type) is:`,new Set(info.cmds.map(each=>each.type)))
     // const otherCmds = info.cmds.filter(each=>each.type != "reexport_dylib")
     // new TextDecoder().decode(new Uint8Array(info.cmds.filter(each=>each.type == "uuid")[0].data))
     // reExportedThings.map(each=>new Uint8Array(each.data))

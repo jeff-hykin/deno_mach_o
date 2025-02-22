@@ -10,11 +10,10 @@ const argsInfo = parseArgs({
     rawArgs: Deno.args,
     fields: [
         [[0, "--file"], str=>str],
-        [["--direct-symbols-only"], flag, (str)=>Boolean(str)],
-        [["--include-internal-symbols"], flag, (str)=>Boolean(str)],
-        [["--extra-roots"], initialValue([]), str=>JSON.parse(str)],
+        [["--recursive"], flag,],
         [["--help"], flag, ],
         [["--version"], flag, ],
+        [["--extra-roots"], initialValue([]), str=>JSON.parse(str)],
     ],
     namedArgsStopper: "--",
     allowNameRepeats: true,
@@ -26,15 +25,13 @@ const argsInfo = parseArgs({
 })
 if (argsInfo.simplifiedNames.help) {
     console.log(`
-        --version                  - prints version
-        --file <path>              - path to .dylib or executable file
-        --extra-roots '[]'         - JSON list of extra root paths to search for
-                                     linked libraries
-                                     ex: 'unable to read /lib/system/libxpc.dylib' will
-                                     try /your_root/lib/system/libxpc.dylib before giving up
-        --direct-symbols-only      - basically = recursive=false
-        --include-internal-symbols - note: usually you'll only care about external symbols
-    
+        --version            - prints version
+        --recursive          - gets the whole tree of linked libraries
+        --file <path>        - path to .dylib or executable file
+        --extra-roots '[]'   - JSON list of extra root paths to search
+                               only really matters for --recursive
+                               ex: 'unable to read /lib/system/libxpc.dylib' will
+                               try /your_root/lib/system/libxpc.dylib before giving up
     NOTE: all output is valid YAML, for easy parsing
     `)
     Deno.exit(0)
@@ -53,11 +50,8 @@ const args = argsInfo.simplifiedNames
 
 const file = Deno.readFileSync(args.file)
 if (args.directSymbolsOnly) {
-    const symbols = getSymbolInfo(file)
-    for (const [key, value] of Object.entries(symbols)) {
-        if (!value.internal || args.includeInternalSymbols) {
-            console.debug(`- ${JSON.stringify(key)}`)
-        }
+    for (let each of getRexportedLibs(file)) {
+        console.log(`- ${JSON.stringify(each)}`)
     }
 } else {
     const start = Path.dirname(args.file)
@@ -86,13 +80,10 @@ if (args.directSymbolsOnly) {
             console.error(`# NOTE: unable to read ${filePath}, skipping. Error: ${`${error?.stack||error}`.replace(/\n/g, "\n #    ")}\n${errorString}`)
             return
         }
-        const symbols = getSymbolInfo(file)
-        for (const [key, value] of Object.entries(symbols)) {
-            if (!value.internal || args.includeInternalSymbols) {
-                console.debug(`- ${JSON.stringify(key)}`)
-            }
-        }
         const libs = getRexportedLibs(file)
+        for (let each of libs) {
+            console.log(`- ${JSON.stringify(each)}`)
+        }
         for (const lib of libs) {
             if (!alreadySeen.has(lib)) {
                 alreadySeen.add(lib)

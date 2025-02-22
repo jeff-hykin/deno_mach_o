@@ -1,5 +1,5 @@
 import { parse as parseMachO } from "./mach_o.js"
-import { getLinkedLibs } from "./get_linked_libs.js"
+import { getRexportedLibs } from "./get_reexported_libs.js"
 
 /**
  * get symbol names and info for a .dylib file
